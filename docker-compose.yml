@@ -1,0 +1,56 @@
+version: "3.8"
+services:
+  dev:
+    container_name: virtual_card_payment_dev
+    image: virtual_card_payment:1.0.0
+    build:
+      context: .
+      target: development
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+      - 3001:3001
+    env_file:
+      - .env
+    networks:
+      - virtual_card_payment-network
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  mongo:
+    image: mongo:4.4.6
+    container_name: virtual_card_payment_mongodb
+    volumes:
+      - ./database:/data/db
+
+    networks:
+      - virtual_card_payment-network
+    restart: always
+  prod:
+    container_name: virtual_card_payment_prod
+    image: virtual_card_payment-prod:1.0.0
+    build:
+      context: .
+      target: production
+    command: npm run start:prod
+    ports:
+      - 3111:3111
+      - 9229:9229
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    networks:
+      - virtual_card_payment-network
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+networks:
+  virtual_card_payment-network:
+    driver: bridge
