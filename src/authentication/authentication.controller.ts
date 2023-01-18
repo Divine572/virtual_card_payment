@@ -110,23 +110,6 @@ export class AuthenticationController {
     return request.user;
     }
 
-
-    @UseGuards(JwtAuthGuard)
-    @Put('updatePassword')
-    updateUserPassword(@Req() request: RequestWithUser, @Body() userData: UpdatePasswordDto) {
-        return this.authenticationService.updatePassword(request.user._id, userData)
-    }
-
-    @Post('forgotPassword')
-    forgotPassword(@Body() userData: ForgotPasswordDto) {
-        return this.authenticationService.forgotPassword(userData)
-    }
-
-    @Put('resetPassword/:token')
-    resetPassword(@Req() request: Request, @Body() userData: ResetPasswordDto, @Param() token: string) {
-        return this.authenticationService.resetPassword(token, userData)
-    }
-
     
 
 

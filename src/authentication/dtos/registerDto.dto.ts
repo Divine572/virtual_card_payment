@@ -23,41 +23,6 @@ export class RegisterDto {
   @ApiProperty()
   fullName: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  state: string;
-
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  country: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  gender: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  city: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  phoneNumber: string;
-
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  address: string;
-
-  @IsBoolean()
-  @ApiProperty()
-  acceptTerms: boolean;
 }
 
 

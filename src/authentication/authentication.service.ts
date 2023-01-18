@@ -1,5 +1,3 @@
-import { UpdatePasswordDto } from './dtos/updatePassword.dto';
-import { EmailService } from './../email/email.service';
 import { ConfigService } from '@nestjs/config';
 import { RegisterDto } from './dtos/registerDto.dto';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
@@ -8,8 +6,7 @@ import * as bcrypt from 'bcryptjs'
 import MongoError from 'src/utils/mongoError.enum';
 import { JwtService } from '@nestjs/jwt';
 import TokenPayload from './tokenPayload.interface';
-import ForgotPasswordDto from './dtos/forgotPassword.dto';
-import ResetPasswordDto from './dtos/resetPassword.dto';
+
 
 
 
@@ -19,7 +16,6 @@ export class AuthenticationService {
     constructor(private readonly usersService: UsersService, 
         private readonly jwtService: JwtService, 
         private readonly configService: ConfigService,
-        private readonly emailService: EmailService
         )
          {
 
@@ -131,57 +127,9 @@ export class AuthenticationService {
 
 
 
-    private async getUserFromToken(token: string) {
-        const user = await this.usersService.verifyResetToken(token)
-        return user
-    }
 
 
-    async resetPassword(token: string, userData: ResetPasswordDto) {
-        const user = await this.getUserFromToken(token)
 
-        if (userData.newPassword !== userData.newPasswordConfirm) {
-            throw new HttpException(
-                'Passwords do not match',
-                HttpStatus.BAD_REQUEST
-            )
-        }
-
-        const updatedUser = await this.usersService.updateResetPassword(user._id, userData)
-        return updatedUser
-    }
-
-
-    async forgotPassword(userData: ForgotPasswordDto) {
-        const user = await this.usersService.getByEmail(userData.email)
-
-        if (!user) {
-            throw new HttpException(
-                `User email doesn't exist `,
-                HttpStatus.NOT_FOUND
-            )
-        }
-
-        const resetToken = this.usersService.createPasswordResetToken(user._id)
-        await user.save({ validateBeforeSave: false })
-
-        const url = `${this.configService.get('EMAIL_RESET_TOKEN_URL')}?token=${resetToken}`;
-
-        const message = `Use this link to reset your password: ${url}`;
-
-        const mailSubject = 'Reset Password'
-
-        return this.emailService.sendEmail(mailSubject, message, user.fullName, user.email, user.phoneNumber)
-    }
-
-    async updatePassword(userId: string, userData: UpdatePasswordDto) {
-        const user = await this.usersService.getById(userId)
-        await this.verifyPassword(userData.oldPassword,  user.password)
-
-
-        const updatedUser = await this.usersService.updateUserPassword(userId, userData)
-        return updatedUser
-    }
 
 
 

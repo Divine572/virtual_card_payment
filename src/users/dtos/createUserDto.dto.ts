@@ -10,38 +10,15 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // @Match('password')
-  // passwordConfirm: string;
-
   @IsString()
   @IsNotEmpty()
-  phoneNumber: string;
+  @Match('password', { message: 'Passwords do not match'})  
+  passwordConfirm: string;
+ 
 
   @IsString()
   @IsNotEmpty()
   fullName: string;
-
-  @IsString()
-  @IsNotEmpty()
-  country: string;
-
-  @IsString()
-  @IsNotEmpty()
-  gender: string;
-
-  @IsString()
-  @IsNotEmpty()
-  city: string;
-
-  @IsString()
-  @IsNotEmpty()
-  state: string;
-
-  @IsString()
-  @IsNotEmpty()
-  address: string;
 
 }
 
