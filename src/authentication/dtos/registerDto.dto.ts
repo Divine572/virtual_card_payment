@@ -1,27 +1,49 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, IsNotEmpty, MinLength, IsBoolean} from 'class-validator';
 import { Match } from 'src/users/decorators/match.decorator';
+import { CustomerType } from 'src/users/dtos/createUserDto.dto';
 
 export class RegisterDto {
   @IsEmail()
-  @ApiProperty()
   email: string;
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty()
   password: string;
+ 
 
   @IsString()
   @IsNotEmpty()
-  @Match('password', { message: 'Passwords do not match'})  
-  @ApiProperty()
-  passwordConfirm: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
   fullName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  customerType: CustomerType
+
+  @IsString()
+  @IsNotEmpty()
+  phoneNumber: string
+
+
+  @IsString()
+  @IsNotEmpty()
+  address: string
+
+  @IsString()
+  @IsNotEmpty()
+  city: string
+
+  @IsString()
+  @IsNotEmpty()
+  state: string
+
+  @IsString()
+  @IsNotEmpty()
+  postalCode: string
+
+  @IsString()
+  @IsNotEmpty()
+  country: string
 
 }
 

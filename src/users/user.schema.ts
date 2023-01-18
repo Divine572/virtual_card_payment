@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
 import mongoose, { Document, ObjectId } from 'mongoose'
 import { Exclude, Transform } from 'class-transformer';
+import { CustomerType } from './dtos/createUserDto.dto';
 
 export type UserDocument = User & Document
 
@@ -17,20 +18,41 @@ export class User {
     _id: ObjectId
 
     @Prop()
-    fullName: string
-
-    @Prop({ unique: true })
-    email: string
+    email: string;
+  
+    @Prop()
+    password: string;
+   
+  
+    @Prop()
+    fullName: string;
+  
+    @Prop()
+    customerType: CustomerType
+  
+    @Prop()
+    phoneNumber: string
+  
+    @Prop()
+    address: string
+  
+    @Prop()
+    city: string
+  
+    @Prop()
+    state: string
+  
+    @Prop()
+    postalCode: string
+  
+    @Prop()
+    country: string
 
     @Prop()
-    @Exclude()
-    currentHashedRefreshToken?: string;
+    currentHashedRefreshToken?: string
 
     @Prop()
-    @Exclude()
-    password: string
-
-
+    status: string
  
 }
 
@@ -38,13 +60,6 @@ const UserSchema = SchemaFactory.createForClass(User)
 
 
 UserSchema.index({ email: 1 });
-
-
-UserSchema.virtual('orders', {
-  ref: 'Order',
-  localField: '_id',
-  foreignField: 'user',
-});
 
 
 

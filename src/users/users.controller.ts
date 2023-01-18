@@ -20,13 +20,7 @@ export class UsersController {
         return this.usersService.getById(id)
     }
 
-    @Post()
-    async addDeliveryAgent() {
-
-    }
-
-    @Get(':id/products')
-    async getFavouriteProducts(@Param() id: string) {
-        return this.usersService.getFavouriteProducts(id)
-    }
 }
+
+
+
