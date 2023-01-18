@@ -54,30 +54,68 @@ export class UsersService {
 
     async create(userData: CreateUserDto) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? this.configService.get('SUDO_BASE_TEST_URL'): this.configService.get('SUDO_BASE_URL')
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/customers`: `${this.configService.get('SUDO_BASE_URL')}/customers`
+            const individualData = {
+                type: userData.customerType,
+                name: userData.fullName,
+                phoneNumber: userData.phoneNumber,
+                emailAddress: userData.email,
+                status: 'active',
+                billingAddress: {
+                    line1: userData.address,
+                    city: userData.city,
+                    state: userData.state,
+                    postalCode: userData.postalCode,
+                    country: userData.country
+                },
+                individual: {
+                    firstName: userData.firstName,
+                    lastName: userData.lastName,
+                    dob: userData.dob,
+                    identity: {
+                        type: userData.identityType,
+                        number: userData.identityNumber
+                    }
+                }
+            }
+
+            const companyData = {
+                type: userData.customerType,
+                name: userData.fullName,
+                phoneNumber: userData.phoneNumber,
+                emailAddress: userData.email,
+                status: 'active',
+                billingAddress: {
+                    line1: userData.address,
+                    city: userData.city,
+                    state: userData.state,
+                    postalCode: userData.postalCode,
+                    country: userData.country
+                },
+                company: {
+                    name: userData.companyName,
+                    identity: {
+                        type: userData.companIdentityType,
+                        number: userData.companyIdentityNumber
+                    }
+                }
+            }
+
+            const data = userData.customerType == 'individual' ? individualData: companyData
+
+
             const options = {
                 method: 'POST',
                 url: url,
                 headers: this.headers,
-                data: {
-                    type: userData.customerType,
-                    name: userData.fullName,
-                    phoneNumber: userData.phoneNumber,
-                    emailAddress: userData.email,
-                    status: 'active',
-                    billingAddress: {
-                        line1: userData.address,
-                        city: userData.city,
-                        state: userData.state,
-                        postalCode: userData.postalCode,
-                        country: userData.country
-                    }
-                }
+                data: data
             }
                     
             const response = await axios.request(options);
             const user = await this.userModel.create({
+                sudoID: response.data._id,
                 customerType : response.data.type,
+                status: response.data.status,
                 email: response.data.emailAddress,
                 password: userData.password,
                 fullName: response.data.name,
@@ -86,7 +124,16 @@ export class UsersService {
                 city: response.data.billingAddress.city,
                 state: response.data.billingAddress.state,
                 postalCode: response.data.billingAddress.postalCode,
-                country: response.data.billingAddress.country
+                country: response.data.billingAddress.country,
+                firstName: response.data?.individual?.firstName,
+                lastName: response.data?.individual?.lastName,
+                dob: response.data?.individual?.dob,
+                identityType: response.data?.individual?.identity?.type,
+                identityNumber: response.data?.individual?.identity?.number,
+                companyName: response.data?.company?.name,
+                companIdentityType: response.data?.company?.identity?.type ,
+                companyIdentityNumber: response.data?.company?.identity?.number,
+
             })
             return user
 
@@ -99,6 +146,11 @@ export class UsersService {
     }
 
     
+
+
+
+
+
 
     async delete(id: string) {
         const user = await this.userModel.findById(id)

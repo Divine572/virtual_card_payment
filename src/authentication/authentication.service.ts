@@ -1,3 +1,4 @@
+import { CreateUserDto } from './../users/dtos/createUserDto.dto';
 import { ConfigService } from '@nestjs/config';
 import { RegisterDto } from './dtos/registerDto.dto';
 import { HttpException, Injectable, HttpStatus } from '@nestjs/common';
@@ -21,7 +22,7 @@ export class AuthenticationService {
 
     }
 
-    async register(user: RegisterDto) {
+    async register(user: CreateUserDto) {
         const userEmail = await this.usersService.getByEmail(user.email)
         if (user.email !== userEmail.email) {
             throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST)

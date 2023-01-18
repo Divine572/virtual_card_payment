@@ -1,3 +1,4 @@
+import { CreateUserDto } from './../users/dtos/createUserDto.dto';
 import { ResetPasswordDto } from './dtos/resetPassword.dto';
 import { ForgotPasswordDto } from './dtos/forgotPassword.dto';
 import { UpdatePasswordDto } from './dtos/updatePassword.dto';
@@ -30,7 +31,7 @@ export class AuthenticationController {
     })
     @HttpCode(201)
     @Post('register')
-    async register(@Body() user: RegisterDto) {
+    async register(@Body() user: CreateUserDto) {
         return this.authenticationService.register(user)
     }
 

@@ -53,6 +53,33 @@ export class User {
 
     @Prop()
     status: string
+
+    @Prop()
+    sudoID: string
+
+    @Prop()
+    firstName: string
+
+    @Prop()
+    lastName: string
+
+    @Prop()
+    dob: string
+
+    @Prop()
+    identityType: string
+
+    @Prop()
+    identityNumber: string
+
+    @Prop()
+    companyName: string
+
+    @Prop()
+    companIdentityType: string
+
+    @Prop()
+    companyIdentityNumber: string
  
 }
 
