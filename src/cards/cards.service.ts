@@ -1,3 +1,4 @@
+import { UpdateCardDto } from './dtos/updateCard.dto';
 import { UsersService } from './../users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { Card, CardDocument, CardStatusType } from './card.schema';
@@ -35,7 +36,7 @@ export class CardsService {
         return card
     }
 
-    async create(cardData: CreateCardDto, sudoID: string) {
+    async create(cardData: CreateCardDto, userSudoID: string) {
         try {
             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
 
@@ -44,7 +45,7 @@ export class CardsService {
             }
 
             const data = {
-                customerId: sudoID,
+                customerId: userSudoID,
                 type: cardType.VIRTUAL,
                 brand: cardData.brand,
                 currency: cardData.currency,
@@ -62,10 +63,8 @@ export class CardsService {
                             interval: cardData.spendingLimitInterval
                         }
                     ]
-
-                }
-
-
+                },
+                sendPINSMS: false
             }
 
             if (data.brand === BrandType.VISA) data['expirationDate'] = cardData.expirationDate
@@ -129,7 +128,53 @@ export class CardsService {
         }
     }
 
-    
+
+
+    async updateCard(sudoID: string, cardData: UpdateCardDto) {
+        try {
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}`
+
+            
+            const data = {
+                status: CardStatusType.ACTIVE,
+                spendingControls: {
+                    spendingLimits: [
+                        {
+                            amount: cardData?.spendingLimitAmount,
+                            interval: cardData?.spendingLimitInterval
+                        }
+                    ]
+                },
+            }
+
+            const options = {
+                method: 'PUT',
+                url: url,
+                headers: this.headers,
+                data: data
+            }
+                    
+            const response = await axios.request(options);
+            const card = await this.cardModel.findByIdAndUpdate(sudoID, {
+                status: response.data?.status,
+                spendingLimitAmount: response.data?.spendingControls?.spendingLimits?.amount,
+                spendingLimitInterval: response.data?.spendingControls?.spendingLimits?.interval,
+            }, )
+            return card
+
+        } catch (err) {
+            throw new HttpException(
+                'Something went wrong while creating a card, Try again!',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+
+
+
+
+
 
 
 

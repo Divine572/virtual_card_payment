@@ -16,7 +16,7 @@ export enum SpendingLimitIntervalType {
 export enum CardStatusType {
     ACTIVE = 'active',
     INACTIVE = 'inactive',
-    CANCELED = 'canceled'
+    // CANCELED = 'canceled'
 }
 
 
