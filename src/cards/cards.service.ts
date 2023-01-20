@@ -69,6 +69,7 @@ export class CardsService {
                 accountNumber: cardData.accountNumber
             }
 
+
             if (data.brand === BrandType.VISA) data['expirationDate'] = cardData.expirationDate
 
             const options = {
@@ -106,7 +107,7 @@ export class CardsService {
     }
 
 
-    async getCustomerCards(cardSudoID: string, userSudoID: string) {
+    async getCustomerCards(userSudoID: string) {
         try {
             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/customer/${userSudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/customer/${userSudoID}`
 
