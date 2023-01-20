@@ -1,3 +1,4 @@
+import { UsersService } from './../users/users.service';
 import { ConfigService } from '@nestjs/config';
 import { Card, CardDocument, CardStatusType } from './card.schema';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
@@ -9,7 +10,7 @@ import axios from 'axios';
 
 @Injectable()
 export class CardsService {
-    constructor(@InjectModel(Card.name) private cardModel: Model<CardDocument>, private configService: ConfigService) {}
+    constructor(@InjectModel(Card.name) private cardModel: Model<CardDocument>, private configService: ConfigService, private usersService: UsersService) {}
 
     headers = {
         accept: 'application/json',
@@ -24,8 +25,8 @@ export class CardsService {
 
     
 
-    async getById(id: string) {
-        const card = await this.cardModel.findById(id)
+    async getById(sudoID: string) {
+        const card = await this.cardModel.findById(sudoID)
 
         if (!card) {
             throw new HttpException('Card with this id does not exist', HttpStatus.NOT_FOUND);
@@ -102,4 +103,41 @@ export class CardsService {
             )
         }
     }
+
+
+    async getCustomerCards(cardSudoID: string, userSudoID: string) {
+        try {
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/customer/${userSudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/customer/${userSudoID}`
+
+           
+
+            const options = {
+                method: 'GET',
+                url: url,
+                headers: this.headers,
+            }
+                    
+            const response = await axios.request(options);
+    
+            return response
+
+        } catch (err) {
+            throw new HttpException(
+                'Something went wrong while creating a card, Try again!',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    
+
+
+
+
+        
+
+
 }
+
+
+
