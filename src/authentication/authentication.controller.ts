@@ -47,14 +47,14 @@ export class AuthenticationController {
     async login(@Req() request: RequestWithUser) {
         const {user} = request
         const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
-            user._id,
+            user.sudoID,
         );
         const {
         cookie: refreshTokenCookie,
         token: refreshToken,
-        } = this.authenticationService.getCookieWithJwtRefreshToken(user._id);
+        } = this.authenticationService.getCookieWithJwtRefreshToken(user.sudoID);
       
-        await this.usersService.setCurrentRefreshToken(refreshToken, user._id);
+        await this.usersService.setCurrentRefreshToken(refreshToken, user.sudoID);
       
         request.res.setHeader('Set-Cookie', [
             accessTokenCookie,
@@ -74,7 +74,7 @@ export class AuthenticationController {
     @Post('logout')
     @HttpCode(200)
     async logOut(@Req() request: RequestWithUser) {
-    await this.usersService.removeRefreshToken(request.user._id);
+    await this.usersService.removeRefreshToken(request.user.sudoID);
 
     request.res?.setHeader(
         'Set-Cookie',
@@ -104,7 +104,7 @@ export class AuthenticationController {
     @Get('refresh')
     refresh(@Req() request: RequestWithUser) {
       const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
-        request.user._id,
+        request.user.sudoID,
     );
   
     request.res.setHeader('Set-Cookie', accessTokenCookie);

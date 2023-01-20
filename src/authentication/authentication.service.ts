@@ -24,7 +24,7 @@ export class AuthenticationService {
 
     async register(user: CreateUserDto) {
         const userEmail = await this.usersService.getByEmail(user.email)
-        if (user.email !== userEmail.email) {
+        if (user.email === userEmail.email) {
             throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST)
         }
         const hashedPassword = await bcrypt.hash(user.password, 10)
