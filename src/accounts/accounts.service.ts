@@ -1,3 +1,4 @@
+import { FundTransferDto } from './dtos/fundTransfer.dto';
 import { BankNameEnquiryDto } from './dtos/bankNameEnquiry.dto';
 import { CreateAccountDto, Type } from './dtos/createAccount.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -174,23 +175,26 @@ export class AccountsService {
 
         } catch (err) {
             throw new HttpException(
-                'Something went wrong while creating an account, Try again!',
+                'Something went wrong while making bank enquiry, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
     }
 
 
-    async fundTransfer() {
+    async fundTransfer(transferData: FundTransferDto, debitAccountSudoID: string) {
         try {
             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer`
 
-            
 
             const data = {
-                
-            }
+                debitAccountId: debitAccountSudoID,
+                beneficiaryBankCode: transferData,
+                beneficiaryAccountNumber: transferData.beneficiaryAccountNumber,
+                amount: transferData.amount,
+                naration: transferData?.narration
 
+            }
 
             const options = {
                 method: 'POST',
@@ -204,7 +208,7 @@ export class AccountsService {
 
         } catch (err) {
             throw new HttpException(
-                'Something went wrong while creating an account, Try again!',
+                'Something went wrong while funding transfer, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
@@ -216,9 +220,9 @@ export class AccountsService {
 
 
 
-    async getCardTransactions(sudoID: string) {
+    async getTransferRate(currencyPair: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/transactions`
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer/rate/${currencyPair}`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer/rate/${currencyPair}`
            
 
             const options = {
@@ -233,7 +237,7 @@ export class AccountsService {
 
         } catch (err) {
             throw new HttpException(
-                'Something went wrong while sending card transactions, Try again!',
+                'Something went wrong while sending transfer rate, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }

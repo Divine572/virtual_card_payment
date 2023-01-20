@@ -8,17 +8,19 @@ export class FundTransferDto {
     @IsNotEmpty()
     debitAccountId: string;
   
-    @ApiProperty()
-    @IsOptional()
-    creditAccountId?: string
+    // @ApiProperty()
+    // @IsOptional()
+    // creditAccountId?: string
 
     @ApiProperty()
-    @IsOptional()
-    beneficiaryBankCode?: string
+    @IsString()
+    @IsNotEmpty()
+    beneficiaryBankCode: string
 
     @ApiProperty()
-    @IsOptional()
-    beneficiaryAccountNumber?: string
+    @IsString()
+    @IsNotEmpty()
+    beneficiaryAccountNumber: string
 
     @ApiProperty()
     @IsNumber()
