@@ -56,6 +56,7 @@ export class AccountsService {
                 headers: this.headers,
                 data: data
             }
+            
                     
             const response = await axios.request(options);
             const account = await this.accountModel.create({
@@ -183,13 +184,14 @@ export class AccountsService {
     }
 
 
-    async fundTransfer(transferData: FundTransferDto, debitAccountSudoID: string) {
+    async fundTransfer(transferData: FundTransferDto, sudoID: string) {
         try {
             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer`
 
+            const account = await this.getById(sudoID)
 
             const data = {
-                debitAccountId: debitAccountSudoID,
+                debitAccountId: account.sudoID,
                 beneficiaryBankCode: transferData,
                 beneficiaryAccountNumber: transferData.beneficiaryAccountNumber,
                 amount: transferData.amount,
