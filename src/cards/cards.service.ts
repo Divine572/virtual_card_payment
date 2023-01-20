@@ -64,7 +64,9 @@ export class CardsService {
                         }
                     ]
                 },
-                sendPINSMS: false
+                sendPINSMS: false,
+                bankCode: cardData?.bankCode,
+                accountNumber: cardData.accountNumber
             }
 
             if (data.brand === BrandType.VISA) data['expirationDate'] = cardData.expirationDate

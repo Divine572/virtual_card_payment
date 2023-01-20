@@ -65,6 +65,7 @@ export class AccountsService {
                 accountType: response.data?.accountType,
                 currentBalance: response.data?.currentBalance,
                 availableBalance: response.data?.availableBalance,
+                bankCode: response.data?.bankCode
             })
             return account
 

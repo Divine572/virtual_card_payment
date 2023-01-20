@@ -50,5 +50,14 @@ export class CreateCardDto {
     })
     @IsOptional()
     expirationDate?: string
+
+
+    @ApiProperty()
+    @IsString()
+    accountNumber?: string
+
+    @ApiProperty()
+    @IsString()
+    bankCode: string
   
 }

@@ -49,6 +49,9 @@ export class Account {
 
     @Prop()
     debitAccountId: string
+
+    @Prop()
+    bankCode: string
 }
 
 const AccountSchema = SchemaFactory.createForClass(Account)
