@@ -7,6 +7,7 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { CardsModule } from './cards/cards.module';
+import { AccountsModule } from './accounts/accounts.module';
 
 import mongodbConfig from './shared/config/mongodb.config';
 
@@ -28,6 +29,8 @@ import mongodbConfig from './shared/config/mongodb.config';
     AuthenticationModule,
 
     CardsModule,
+
+    AccountsModule,
 
   ],
   controllers: [AppController, UsersController],

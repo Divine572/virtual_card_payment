@@ -78,7 +78,7 @@ export class CardsService {
                     
             const response = await axios.request(options);
             const card = await this.cardModel.create({
-                sudoID: response.data._id,
+                sudoID: response.data?._id,
                 type: response.data?.type,
                 brand: response.data?.brand,
                 currency: response.data?.currency,
@@ -164,11 +164,115 @@ export class CardsService {
 
         } catch (err) {
             throw new HttpException(
-                'Something went wrong while creating a card, Try again!',
+                'Something went wrong while updating card, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
     }
+
+
+    async generateCardToken(sudoID: string) {
+        try {
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/token`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/token`
+           
+
+            const options = {
+                method: 'GET',
+                url: url,
+                headers: this.headers,
+            }
+                    
+            const response = await axios.request(options);
+    
+            return response
+
+        } catch (err) {
+            throw new HttpException(
+                'Something went wrong while generating card token, Try again!',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+    async getAllTransactions() {
+        try {
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/transactions`
+           
+
+            const options = {
+                method: 'GET',
+                url: url,
+                headers: this.headers,
+            }
+                    
+            const response = await axios.request(options);
+    
+            return response
+
+        } catch (err) {
+            throw new HttpException(
+                'Something went wrong while sending transactions, Try again!',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+
+    async getCardTransactions(sudoID: string) {
+        try {
+            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/transactions`
+           
+
+            const options = {
+                method: 'GET',
+                url: url,
+                headers: this.headers,
+            }
+                    
+            const response = await axios.request(options);
+    
+            return response
+
+        } catch (err) {
+            throw new HttpException(
+                'Something went wrong while sending card transactions, Try again!',
+                HttpStatus.INTERNAL_SERVER_ERROR
+            )
+        }
+    }
+
+
+    // async getTransactionDetails(cardSudoID: string) {
+    //     const cardTransactions = await this.getCardTransactions(cardSudoID)
+    //     for (let i = 0; i < (cardTransactions.data)) {
+    //         transaction = cardTransactions.data
+    //         let transactionId = transaction?._id
+    //         try {
+    //             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/transactions/${transactionId}`: `${this.configService.get('SUDO_BASE_URL')}/cards/transactions/${transactionId}`
+               
+    
+    //             const options = {
+    //                 method: 'GET',
+    //                 url: url,
+    //                 headers: this.headers,
+    //             }
+                        
+    //             const response = await axios.request(options);
+        
+    //             return response
+    
+    //         } catch (err) {
+    //             throw new HttpException(
+    //                 'Something went wrong while sending card transactions, Try again!',
+    //                 HttpStatus.INTERNAL_SERVER_ERROR
+    //             )
+    //         }
+
+    //     }
+    // }
+
+
+    
 
 
 
