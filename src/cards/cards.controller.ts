@@ -1,11 +1,14 @@
+import { Card } from './card.schema';
 import { UpdateCardDto } from './dtos/updateCard.dto';
 import  RequestWithUser  from 'src/authentication/requestWithUser.interface';
 import { JwtAuthGuard } from './../authentication/jwt-authentication.guard';
 import { CreateCardDto } from './dtos/createCard.dto';
 import { CardsService } from './cards.service';
-import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, UseGuards, UseInterceptors } from '@nestjs/common';
+import MongooseClassSerializerInterceptor from 'src/utils/mongooseClassSerializer.interceptor';
 
 @Controller('cards')
+@UseInterceptors(MongooseClassSerializerInterceptor(Card))
 export class CardsController {
     constructor(private cardsService: CardsService) {}
 
