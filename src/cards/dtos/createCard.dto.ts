@@ -1,5 +1,6 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { SpendingLimitIntervalType } from './../card.schema';
-import { IsEmail, IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsEmail, IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export enum BrandType {
     MASTERCARD = 'MasterCard',
@@ -14,28 +15,40 @@ export enum CurrencyPair {
 
 
 export class CreateCardDto {
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     customerId: string;
   
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     type: string;
   
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     brand: BrandType
   
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     currency: CurrencyPair
 
+    @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
     spendingLimitAmount: number
   
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
     spendingLimitInterval: SpendingLimitIntervalType
+
+    @ApiProperty({
+        description: 'Format MMM-YYYY example AUG-2025. All cards are subject to maximum of 3 years validity.'
+    })
+    @IsOptional()
+    expirationDate?: string
   
 }

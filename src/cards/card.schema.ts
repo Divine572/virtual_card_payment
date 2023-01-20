@@ -30,6 +30,9 @@ export enum CardStatusType {
 export class Card {
     @Transform(({value}) => value.toString())
     _id: ObjectId
+
+    @Prop()
+    sudoID: string
   
     @Prop()
     debitAccountId: string
@@ -52,8 +55,8 @@ export class Card {
     @Prop()
     status: CardStatusType
 
-    @Prop()
-    accountNumber: string
+    // @Prop()
+    // accountNumber: string
 
     @Prop()
     bankCode: string
@@ -75,7 +78,21 @@ export class Card {
 
     @Prop()
     spendingLimitInterval: SpendingLimitIntervalType
- 
+
+    // @Prop()
+    // cancellationReason: string
+
+    // @Prop()
+    // creditAccountId: string
+
+    @Prop()
+    maskedPan: string
+
+    @Prop()
+    expiryMonth: string
+
+    @Prop()
+    expiryYear: string
 }
 
 const CardSchema = SchemaFactory.createForClass(Card)
