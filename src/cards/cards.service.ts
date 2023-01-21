@@ -29,8 +29,8 @@ export class CardsService {
 
     
 
-    async getById(sudoID: string) {
-        const card = await this.cardModel.findById(sudoID)
+    async getBySudoId(sudoID: string) {
+        const card = await this.cardModel.findOne({sudoID})
 
         if (!card) {
             throw new HttpException('Card with this id does not exist', HttpStatus.NOT_FOUND);
@@ -161,7 +161,7 @@ export class CardsService {
             }
                     
             const response = await axios.request(options);
-            const card = await this.cardModel.findByIdAndUpdate(sudoID, {
+            const card = await this.cardModel.findOneAndUpdate({sudoID}, {
                 status: response.data.data?.status,
                 spendingLimitAmount: response.data.data?.spendingControls?.spendingLimits?.amount,
                 spendingLimitInterval: response.data.data?.spendingControls?.spendingLimits?.interval,

@@ -29,8 +29,8 @@ export class AccountsService {
 
     
 
-    async getById(sudoID: string) {
-        const account = await this.accountModel.findById(sudoID)
+    async getBySudoId(sudoID: string) {
+        const account = await this.accountModel.findOne({sudoID})
 
         if (!account) {
             throw new HttpException('Account with this id does not exist', HttpStatus.NOT_FOUND);
@@ -191,7 +191,7 @@ export class AccountsService {
         try {
             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer`
 
-            const account = await this.getById(sudoID)
+            const account = await this.getBySudoId(sudoID)
 
             const data = {
                 debitAccountId: account.sudoID,

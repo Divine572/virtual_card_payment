@@ -46,38 +46,16 @@ export class AuthenticationController {
     async login(@Req() request: RequestWithUser) {
         const {user} = request
         const userData = user.toObject()
-        const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
+        const accessToken = this.authenticationService.getJwtAccessToken(
             user.sudoID,
         );
-            
-        request.res.setHeader('Set-Cookie', [
-            accessTokenCookie,
-            
-        ]);
 
         return {
             ...userData,
-            accessTokenCookie
+            accessToken
         }
     }
-
-
-
-    @ApiOkResponse({
-        status: 200,
-        description: 'A User has been successfully loggedout',
-    })
-    @UseGuards(JwtAuthGuard)
-    @Post('logout')
-    @HttpCode(200)
-    async logOut(@Req() request: RequestWithUser) {
-    await this.usersService.removeRefreshToken(request.user.sudoID);
-
-    request.res?.setHeader(
-        'Set-Cookie',
-        this.authenticationService.getCookiesForLogOut(),
-      );
-    }
+   
 
   
     @ApiOkResponse({
@@ -89,7 +67,6 @@ export class AuthenticationController {
     @Get('me')
     me(@Req() request: RequestWithUser) {
         const user =  request.user;
-        console.log(user)
         return user
     }
 

@@ -27,8 +27,6 @@ export enum CardStatusType {
     timestamps: true
 })
 export class Card {
-    @Transform(({value}) => value.toString())
-    _id: ObjectId
 
     @Prop()
     sudoID: string

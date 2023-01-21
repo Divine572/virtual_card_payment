@@ -14,8 +14,6 @@ export type UserDocument = User & Document
     timestamps: true
 })
 export class User {
-    @Transform(({value}) => value.toString())
-    _id: ObjectId
 
     @Prop({ unique: true })
     email: string;

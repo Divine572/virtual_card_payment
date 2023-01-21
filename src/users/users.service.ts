@@ -44,8 +44,8 @@ export class UsersService {
 
     
 
-    async getById(id: string) {
-        const user = await this.userModel.findById(id)
+    async getBySudoId(sudoID: string) {
+        const user = await this.userModel.findOne({ sudoID: sudoID})
 
         if (!user) {
             throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
@@ -170,44 +170,17 @@ export class UsersService {
 
 
 
-    async delete(id: string) {
-        const user = await this.userModel.findById(id)
+    async delete(sudoID: string) {
+        const user = await this.userModel.findOne({ sudoID: sudoID })
 
         if (!user) {
             throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
         } 
 
-        await this.userModel.findByIdAndDelete(id)
+        await user.delete()
     }
 
-    async setCurrentRefreshToken(refreshToken: string, userId: string) {
-        const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-        await this.userModel.findByIdAndUpdate(userId, {
-            currentHashedRefreshToken: currentHashedRefreshToken
-        }, {
-            new: true,
-            overwrite: true
-        });
-      }
-
-      async getUserIfRefreshTokenMatches(refreshToken: string, userId: string) {
-        const user = await this.getById(userId);
-     
-        const isRefreshTokenMatching = await bcrypt.compare(
-          refreshToken,
-          user.currentHashedRefreshToken
-        );
-     
-        if (isRefreshTokenMatching) {
-          return user;
-        }
-      }
-
-    async removeRefreshToken(userId: string) {
-        return this.userModel.findByIdAndUpdate(userId, {
-          currentHashedRefreshToken: null
-        })
-    }
+   
 
 
 }

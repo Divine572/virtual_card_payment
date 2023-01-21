@@ -16,19 +16,16 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
         let token;
         if (request.headers.authorization || request.headers.authorization.startsWith('Bearer')) {
-          token = request?.headers?.Authentication;
-        } else if (request.cookies.jwt) {
-          token = request?.cookies.jwt
+          token = request?.headers?.authorization.split(' ')[1];
         }
         return token
-        
       }]),
       secretOrKey: configService.get('JWT_ACCESS_TOKEN_SECRET')
     });
   }
  
   async validate(payload: TokenPayload) {
-    return this.userService.getById(payload.userId);
+    return this.userService.getBySudoId(payload.userId);
   }
 }
 

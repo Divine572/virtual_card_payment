@@ -21,7 +21,7 @@ export class CardsController {
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async getCard(@Param() id: string) {
-        return this.cardsService.getById(id)
+        return this.cardsService.getBySudoId(id)
     }
 
     @Post()

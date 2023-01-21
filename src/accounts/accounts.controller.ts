@@ -24,7 +24,7 @@ export class AccountsController {
     @Get(':id')
     @UseGuards(JwtAuthGuard)
     async getAccount(@Param() id: string) {
-        return this.accountsService.getById(id)
+        return this.accountsService.getBySudoId(id)
     }
 
     @Post()

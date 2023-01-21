@@ -53,22 +53,13 @@ export class AuthenticationService {
 
 
 
-
-    public getCookiesForLogOut() {
-        return [
-          'HttpOnly; Path=/; Max-Age=0',
-          'Refresh=; HttpOnly; Path=/; Max-Age=0'
-        ];
-    }
-
-
-    public getCookieWithJwtAccessToken(userId: string) {
+    public getJwtAccessToken(userId: string) {
         const payload: TokenPayload = { userId };
         const token = this.jwtService.sign(payload, {
           secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
           expiresIn: `${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`
         });
-        return `${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}`;
+        return token
     }
      
 
@@ -78,7 +69,7 @@ export class AuthenticationService {
           secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
         });
         if (payload.userId) {
-          return this.usersService.getById(payload.userId);
+          return this.usersService.getBySudoId(payload.userId);
         }
     }
 

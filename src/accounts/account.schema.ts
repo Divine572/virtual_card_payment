@@ -17,8 +17,6 @@ export type AccountDocument = Account & Document
     timestamps: true
 })
 export class Account {
-    @Transform(({value}) => value.toString())
-    _id: ObjectId
 
     @Prop()
     sudoID: string
