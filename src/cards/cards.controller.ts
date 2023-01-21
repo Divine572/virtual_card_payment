@@ -13,11 +13,13 @@ export class CardsController {
     constructor(private cardsService: CardsService) {}
 
     @Get()
+    @UseGuards(JwtAuthGuard)
     async getCards() {
         return this.cardsService.get()
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async getCard(@Param() id: string) {
         return this.cardsService.getById(id)
     }

@@ -14,8 +14,10 @@ async function bootstrap() {
   const logger = new Logger('Main')
   app.enableCors({
     origin: 'http://localhost:3000',
-    credentials: true
+    credentials: true,
+    
   })
+  
 
   app.setGlobalPrefix('api/v1')
   setupSwagger(app)
