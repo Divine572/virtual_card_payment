@@ -46,6 +46,7 @@ export class AuthenticationController {
     @ApiBody({ type: LoginDto })
     async login(@Req() request: RequestWithUser) {
         const {user} = request
+        const userData = user.toObject()
         const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
             user.sudoID,
         );
@@ -61,7 +62,11 @@ export class AuthenticationController {
             refreshTokenCookie,
         ]);
 
-        return user
+        return {
+            ...userData,
+            accessTokenCookie,
+            refreshTokenCookie
+        }
     }
 
 
@@ -103,12 +108,19 @@ export class AuthenticationController {
     @UseGuards(JwtRefreshGuard)
     @Get('refresh')
     refresh(@Req() request: RequestWithUser) {
-      const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
-        request.user.sudoID,
-    );
+        const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(request.user.sudoID);
   
-    request.res.setHeader('Set-Cookie', accessTokenCookie);
-    return request.user;
+        const {user} = request
+        const userData = user.toObject()
+        request.res.setHeader('Set-Cookie', accessTokenCookie);
+
+        return { 
+            ...userData,
+            accessTokenCookie
+        }
+
+
+
     }
 
     
