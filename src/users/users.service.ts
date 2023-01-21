@@ -1,13 +1,14 @@
 import { ConfigService } from '@nestjs/config';
 
-import { CreateUserDto } from './dtos/createUserDto.dto';
+import { CreateUserDto, CustomerType, IdentityType } from './dtos/createUserDto.dto';
 import { User, UserDocument } from './user.schema';
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcryptjs'
 import crypto from 'crypto';
 import axios  from 'axios';
+import MongoError from 'src/utils/mongoError.enum';
 
 
 
@@ -16,10 +17,11 @@ export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private configService: ConfigService) {
     }
 
+    TOKEN = this.configService.get('NODE_ENV') === 'production'? this.configService.get('SUDO_API_KEY'): this.configService.get('SUDO_API_DEV_KEY')
    
     headers = {
-        accept: 'application/json',
-        "Authorization": `Bearer ${this.configService.get('SUDO_API_KEY')}`,
+        'accept': 'application/json',
+        "Authorization": `Bearer ${this.TOKEN}`,
         'content-type': 'application/json',
     }
 
@@ -52,9 +54,11 @@ export class UsersService {
         return user
     }
 
-    async create(userData: CreateUserDto) {
+    async createUser(userData: CreateUserDto) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/customers`: `${this.configService.get('SUDO_BASE_URL')}/customers`
+            const hashedPassword = await bcrypt.hash(userData.password, 10)
+
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/customers`: `${this.configService.get('SUDO_BASE_URL')}/customers`
             const individualData = {
                 type: userData.customerType,
                 name: userData.fullName,
@@ -95,13 +99,25 @@ export class UsersService {
                 company: {
                     name: userData.companyName,
                     identity: {
-                        type: userData.companIdentityType,
-                        number: userData.companyIdentityNumber
+                        type: userData.identityType,
+                        number: userData.identityNumber
                     }
                 }
             }
 
-            const data = userData.customerType == 'individual' ? individualData: companyData
+            let data = {}
+
+            if (userData.customerType === CustomerType.INDIVIDUAL) {
+                data = {
+                    ...individualData
+                }
+            } else if (userData.identityType === CustomerType.COMPANY) {
+                data = {
+                    ...companyData
+                }
+            }
+
+            // console.log(data)
 
 
             const options = {
@@ -112,42 +128,44 @@ export class UsersService {
             }
                     
             const response = await axios.request(options);
-            const user = await this.userModel.create({
-                sudoID: response.data._id,
-                customerType : response.data.type,
-                status: response.data.status,
-                email: response.data.emailAddress,
-                password: userData.password,
-                fullName: response.data.name,
-                phoneNumber: response.data.phoneNumber,
-                address: response.data.billingAddress.line1,
-                city: response.data.billingAddress.city,
-                state: response.data.billingAddress.state,
-                postalCode: response.data.billingAddress.postalCode,
-                country: response.data.billingAddress.country,
-                firstName: response.data?.individual?.firstName,
-                lastName: response.data?.individual?.lastName,
-                dob: response.data?.individual?.dob,
-                identityType: response.data?.individual?.identity?.type,
-                identityNumber: response.data?.individual?.identity?.number,
-                companyName: response.data?.company?.name,
-                companIdentityType: response.data?.company?.identity?.type ,
-                companyIdentityNumber: response.data?.company?.identity?.number,
 
+            const user = await this.userModel.create({
+                sudoID: response.data.data._id,
+                customerType : response.data.data.type,
+                status: response.data.data.status,
+                email: response.data.data.emailAddress,
+                password: hashedPassword,
+                fullName: response.data.data.name,
+                phoneNumber: response.data.data?.phoneNumber,
+                address: response.data?.billingAddress?.line1,
+                city: response.data.data?.billingAddress?.city,
+                state: response.data.data?.billingAddress?.state,
+                postalCode: response.data.data?.billingAddress?.postalCode,
+                country: response.data.data?.billingAddress?.country,
+                firstName: response.data.data?.individual?.firstName,
+                lastName: response.data.data?.individual?.lastName,
+                dob: response.data.data?.individual?.dob,
+                identityType: response.data.data?.individual?.identity?.type,
+                identityNumber: response.data.data?.individual?.identity?.number,
+                companyName: response.data.data?.company?.name,
+                companIdentityType: response.data.data?.company?.identity?.type ,
+                companyIdentityNumber: response.data.data?.company?.identity?.number,
             })
             return user
 
         } catch (err) {
+            if (err?.code === MongoError.DuplicateKey) {
+                throw new HttpException(
+                    'User with that email already exists',
+                    HttpStatus.BAD_REQUEST
+                )
+            }
             throw new HttpException(
                 'Something went wrong while creating an account, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
             )
         }
     }
-
-    
-
-
 
 
 
@@ -190,11 +208,6 @@ export class UsersService {
           currentHashedRefreshToken: null
         })
     }
-
-
-
-   
-
 
 
 }

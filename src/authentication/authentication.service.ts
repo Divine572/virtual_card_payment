@@ -22,35 +22,9 @@ export class AuthenticationService {
 
     }
 
-    async register(user: CreateUserDto) {
-        const userEmail = await this.usersService.getByEmail(user.email)
-        if (user.email === userEmail.email) {
-            throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST)
-        }
-        const hashedPassword = await bcrypt.hash(user.password, 10)
-        try {
-            const createdUser = await this.usersService.create({
-                ...user,
-                password: hashedPassword
-            })
-            createdUser.password = undefined
-            return createdUser
-        } catch(err) {
-            if (err?.code === MongoError.DuplicateKey) {
-                console.log(err)
-                throw new HttpException(
-                    'User with that email already exists',
-                    HttpStatus.BAD_REQUEST
-                )
-            }
-            throw new HttpException(
-                'Something went wrong',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            )
-        }
-
-
-
+    async register(userData: RegisterDto) {
+        const user = await this.usersService.createUser(userData)
+        return user
     }
 
     private async verifyPassword(password: string, hashedPassword: string) {

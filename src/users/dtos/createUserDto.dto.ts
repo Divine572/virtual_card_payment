@@ -34,7 +34,7 @@ export class CreateUserDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  customerType: CustomerType
+  customerType: string
 
   @ApiProperty()
   @IsString()
@@ -68,29 +68,32 @@ export class CreateUserDto {
   country: string
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   firstName: string
 
-
+  @IsString()
+  @IsNotEmpty()
   @ApiProperty()
   lastName: string
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   dob: string
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   identityType: string
 
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   identityNumber: string
 
   @ApiProperty()
-  companyName: string
-
-  @ApiProperty()
-  companIdentityType: IdentityType
-
-  @ApiProperty()
-  companyIdentityNumber: string
+  companyName?: string
 
 }
 

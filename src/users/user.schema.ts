@@ -17,7 +17,7 @@ export class User {
     @Transform(({value}) => value.toString())
     _id: ObjectId
 
-    @Prop()
+    @Prop({ unique: true })
     email: string;
   
     @Prop()
@@ -84,9 +84,6 @@ export class User {
 }
 
 const UserSchema = SchemaFactory.createForClass(User)
-
-
-UserSchema.index({ email: 1 });
 
 
 

@@ -60,13 +60,13 @@ export class AccountsService {
                     
             const response = await axios.request(options);
             const account = await this.accountModel.create({
-                sudoID: response.data._id,
-                type: response.data?.type,
-                accountName: response.data?.accountName,
-                accountType: response.data?.accountType,
-                currentBalance: response.data?.currentBalance,
-                availableBalance: response.data?.availableBalance,
-                bankCode: response.data?.bankCode
+                sudoID: response.data.data._id,
+                type: response.data.data?.type,
+                accountName: response.data.data?.accountName,
+                accountType: response.data.data?.accountType,
+                currentBalance: response.data.data?.currentBalance,
+                availableBalance: response.data.data?.availableBalance,
+                bankCode: response.data.data?.bankCode
             })
             return account
 
@@ -93,7 +93,7 @@ export class AccountsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -120,7 +120,7 @@ export class AccountsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -143,7 +143,7 @@ export class AccountsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -173,7 +173,7 @@ export class AccountsService {
             }
                     
             const response = await axios.request(options);
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -207,7 +207,7 @@ export class AccountsService {
             }
                     
             const response = await axios.request(options);
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -236,7 +236,7 @@ export class AccountsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(

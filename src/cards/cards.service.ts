@@ -81,20 +81,20 @@ export class CardsService {
                     
             const response = await axios.request(options);
             const card = await this.cardModel.create({
-                sudoID: response.data?._id,
-                type: response.data?.type,
-                brand: response.data?.brand,
-                currency: response.data?.currency,
-                maskedPan: response.data?.maskedPan,
-                expiryMonth: response.data?.expiryMonth,
-                expiryYear: response.data?.expiryYear,
-                status: response.data?.status,
-                atmChannel: response.data?.spendingControls?.channels?.atm,
-                posChannel: response.data?.spendingControls?.channels?.pos,
-                webChannel: response.data?.spendingControls?.channels?.web,
-                mobileChannel: response.data?.spendingControls?.channels?.mobile,
-                spendingLimitAmount: response.data?.spendingControls?.spendingLimits?.amount,
-                spendingLimitInterval: response.data?.spendingControls?.spendingLimits?.interval,
+                sudoID: response.data.data?._id,
+                type: response.data.data?.type,
+                brand: response.data.data?.brand,
+                currency: response.data.data?.currency,
+                maskedPan: response.data.data?.maskedPan,
+                expiryMonth: response.data.data?.expiryMonth,
+                expiryYear: response.data.data?.expiryYear,
+                status: response.data.data?.status,
+                atmChannel: response.data.data?.spendingControls?.channels?.atm,
+                posChannel: response.data.data?.spendingControls?.channels?.pos,
+                webChannel: response.data.data?.spendingControls?.channels?.web,
+                mobileChannel: response.data.data?.spendingControls?.channels?.mobile,
+                spendingLimitAmount: response.data.data?.spendingControls?.spendingLimits?.amount,
+                spendingLimitInterval: response.data.data?.spendingControls?.spendingLimits?.interval,
             })
             return card
 
@@ -121,7 +121,7 @@ export class CardsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -159,9 +159,9 @@ export class CardsService {
                     
             const response = await axios.request(options);
             const card = await this.cardModel.findByIdAndUpdate(sudoID, {
-                status: response.data?.status,
-                spendingLimitAmount: response.data?.spendingControls?.spendingLimits?.amount,
-                spendingLimitInterval: response.data?.spendingControls?.spendingLimits?.interval,
+                status: response.data.data?.status,
+                spendingLimitAmount: response.data.data?.spendingControls?.spendingLimits?.amount,
+                spendingLimitInterval: response.data.data?.spendingControls?.spendingLimits?.interval,
             }, )
             return card
 
@@ -210,7 +210,7 @@ export class CardsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -234,7 +234,7 @@ export class CardsService {
                     
             const response = await axios.request(options);
     
-            return response
+            return response.data
 
         } catch (err) {
             throw new HttpException(
@@ -244,35 +244,6 @@ export class CardsService {
         }
     }
 
-
-    // async getTransactionDetails(cardSudoID: string) {
-    //     const cardTransactions = await this.getCardTransactions(cardSudoID)
-    //     for (let i = 0; i < (cardTransactions.data)) {
-    //         transaction = cardTransactions.data
-    //         let transactionId = transaction?._id
-    //         try {
-    //             const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/transactions/${transactionId}`: `${this.configService.get('SUDO_BASE_URL')}/cards/transactions/${transactionId}`
-               
-    
-    //             const options = {
-    //                 method: 'GET',
-    //                 url: url,
-    //                 headers: this.headers,
-    //             }
-                        
-    //             const response = await axios.request(options);
-        
-    //             return response
-    
-    //         } catch (err) {
-    //             throw new HttpException(
-    //                 'Something went wrong while sending card transactions, Try again!',
-    //                 HttpStatus.INTERNAL_SERVER_ERROR
-    //             )
-    //         }
-
-    //     }
-    // }
 
 
     
