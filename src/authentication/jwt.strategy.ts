@@ -14,7 +14,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
-        return request?.cookies?.Authentication;
+        let token;
+        if (request.headers.authorization || request.headers.authorization.startsWith('Bearer')) {
+          token = request?.headers?.Authentication;
+        } else if (request.cookies.jwt) {
+          token = request?.cookies.jwt
+        }
+        return token
+        
       }]),
       secretOrKey: configService.get('JWT_ACCESS_TOKEN_SECRET')
     });
@@ -24,7 +31,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return this.userService.getById(payload.userId);
   }
 }
-
 
 
 

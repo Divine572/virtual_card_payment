@@ -11,7 +11,6 @@ import { AuthenticationService } from './authentication.service';
 import { Body, Controller, Post, HttpCode, UseGuards, Req, UseInterceptors, Get, Put, Param } from '@nestjs/common';
 import RegisterDto from './dtos/registerDto.dto';
 import RequestWithUser from './requestWithUser.interface';
-import JwtRefreshGuard from './jwt-refresh.guard';
 import { ApiBody, ApiCreatedResponse, ApiHeaders, ApiOkResponse } from '@nestjs/swagger';
 import LoginDto from './dtos/login.dto';
 
@@ -50,22 +49,15 @@ export class AuthenticationController {
         const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(
             user.sudoID,
         );
-        const {
-        cookie: refreshTokenCookie,
-        token: refreshToken,
-        } = this.authenticationService.getCookieWithJwtRefreshToken(user.sudoID);
-      
-        await this.usersService.setCurrentRefreshToken(refreshToken, user.sudoID);
-      
+            
         request.res.setHeader('Set-Cookie', [
             accessTokenCookie,
-            refreshTokenCookie,
+            
         ]);
 
         return {
             ...userData,
-            accessTokenCookie,
-            refreshTokenCookie
+            accessTokenCookie
         }
     }
 
@@ -101,27 +93,10 @@ export class AuthenticationController {
         return user
     }
 
-    @ApiOkResponse({
-        status: 200,
-        description: 'Used to get set access token to cookies when a user jwt token expires and and still has a valid access token. Returns User details',
-    })
-    @UseGuards(JwtRefreshGuard)
-    @Get('refresh')
-    refresh(@Req() request: RequestWithUser) {
-        const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(request.user.sudoID);
-  
-        const {user} = request
-        const userData = user.toObject()
-        request.res.setHeader('Set-Cookie', accessTokenCookie);
-
-        return { 
-            ...userData,
-            accessTokenCookie
-        }
+ 
 
 
-
-    }
+    
 
     
 
