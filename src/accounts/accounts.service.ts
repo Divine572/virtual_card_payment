@@ -13,9 +13,12 @@ import axios from 'axios';
 export class AccountsService {
     constructor(@InjectModel(Account.name) private accountModel: Model<AccountDocument>, private configService: ConfigService, private usersService: UsersService) {}
 
+    
+    TOKEN = this.configService.get('NODE_ENV') === 'production'? this.configService.get('SUDO_API_KEY'): this.configService.get('SUDO_API_DEV_KEY')
+   
     headers = {
-        accept: 'application/json',
-        "Authorization": `Bearer ${this.configService.get('SUDO_API_KEY')}`,
+        'accept': 'application/json',
+        "Authorization": `Bearer ${this.TOKEN}`,
         'content-type': 'application/json',
     }
 
