@@ -13,7 +13,7 @@ async function bootstrap() {
   }))
   const logger = new Logger('Main')
   app.enableCors({
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true
   })
 
