@@ -14,8 +14,6 @@ export enum AccountType {
 }
 
 export class CreateAccountDto {
-    @ApiProperty()
-    customerId?: string;
   
     @ApiProperty()
     @IsString()

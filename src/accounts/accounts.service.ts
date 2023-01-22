@@ -41,7 +41,7 @@ export class AccountsService {
 
     async create(accountData: CreateAccountDto, userSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts`: `${this.configService.get('SUDO_BASE_URL')}/accounts`
+            const url = this.configService.get('NODE_ENV') == 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts`: `${this.configService.get('SUDO_BASE_URL')}/accounts`
 
             
 
