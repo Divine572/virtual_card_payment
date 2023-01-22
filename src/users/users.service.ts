@@ -137,7 +137,7 @@ export class UsersService {
                 password: hashedPassword,
                 fullName: response.data.data.name,
                 phoneNumber: response.data.data?.phoneNumber,
-                address: response.data?.billingAddress?.line1,
+                address: response.data.data?.billingAddress?.line1,
                 city: response.data.data?.billingAddress?.city,
                 state: response.data.data?.billingAddress?.state,
                 postalCode: response.data.data?.billingAddress?.postalCode,
