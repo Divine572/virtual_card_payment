@@ -15,10 +15,6 @@ export enum CurrencyPair {
 
 
 export class CreateCardDto {
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    type: string;
   
     @ApiProperty()
     @IsString()

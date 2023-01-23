@@ -41,7 +41,7 @@ export class CardsService {
 
     async create(cardData: CreateCardDto, userSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
 
             enum cardType {
                 VIRTUAL = 'virtual'
@@ -83,6 +83,7 @@ export class CardsService {
             }
                     
             const response = await axios.request(options);
+            console.log(response.data.message)
             const card = await this.cardModel.create({
                 sudoID: response.data.data?._id,
                 type: response.data.data?.type,
@@ -102,6 +103,7 @@ export class CardsService {
             return card
 
         } catch (err) {
+            console.log(err.message)
             throw new HttpException(
                 'Something went wrong while creating a card, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
