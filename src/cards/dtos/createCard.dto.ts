@@ -18,11 +18,6 @@ export class CreateCardDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    customerId: string;
-  
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
     type: string;
   
     @ApiProperty()

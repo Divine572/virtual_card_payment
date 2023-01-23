@@ -41,7 +41,7 @@ export class CardsService {
 
     async create(cardData: CreateCardDto, userSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
+            const url = this.configService.get('NODE_ENV') == 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
 
             enum cardType {
                 VIRTUAL = 'virtual'

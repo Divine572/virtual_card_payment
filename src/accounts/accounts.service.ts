@@ -1,6 +1,6 @@
 import { FundTransferDto } from './dtos/fundTransfer.dto';
 import { BankNameEnquiryDto } from './dtos/bankNameEnquiry.dto';
-import { CreateAccountDto, Type } from './dtos/createAccount.dto';
+import { CreateAccountDto, AccountType, Type } from './dtos/createAccount.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -41,7 +41,7 @@ export class AccountsService {
 
     async create(accountData: CreateAccountDto, userSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts`: `${this.configService.get('SUDO_BASE_URL')}/accounts`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts`: `${this.configService.get('SUDO_BASE_URL')}/accounts`
 
             
 
@@ -62,8 +62,9 @@ export class AccountsService {
             
                     
             const response = await axios.request(options);
+            console.log(response)
             const account = await this.accountModel.create({
-                sudoID: response.data.data._id,
+                sudoID: response.data.data?._id,
                 type: response.data.data?.type,
                 accountName: response.data.data?.accountName,
                 accountType: response.data.data?.accountType,
@@ -74,6 +75,7 @@ export class AccountsService {
             return account
 
         } catch (err) {
+            console.log(err)
             throw new HttpException(
                 'Something went wrong while creating an account, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR
