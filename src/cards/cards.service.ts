@@ -68,8 +68,8 @@ export class CardsService {
                     ]
                 },
                 sendPINSMS: false,
-                bankCode: cardData?.bankCode,
-                accountNumber: cardData.accountNumber
+                // bankCode: cardData?.bankCode,
+                // accountNumber: cardData.accountNumber
             }
 
 
