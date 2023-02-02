@@ -86,7 +86,7 @@ export class AccountsService {
 
     async getAccountBalance(accountSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/${accountSudoID}/balance`: `${this.configService.get('SUDO_BASE_URL')}/accounts/${accountSudoID}/balance`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/${accountSudoID}/balance`: `${this.configService.get('SUDO_BASE_URL')}/accounts/${accountSudoID}/balance`
 
            
 
@@ -114,7 +114,7 @@ export class AccountsService {
 
     async getAccountTransactions(accountSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/${accountSudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/accounts/${accountSudoID}/transactions`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/${accountSudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/accounts/${accountSudoID}/transactions`
            
 
             const options = {
@@ -137,7 +137,7 @@ export class AccountsService {
 
     async getBankList() {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/banks`: `${this.configService.get('SUDO_BASE_URL')}/accounts/banks`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/banks`: `${this.configService.get('SUDO_BASE_URL')}/accounts/banks`
            
 
             const options = {
@@ -160,7 +160,7 @@ export class AccountsService {
 
     async enquireBankName(bankEnquiry: BankNameEnquiryDto) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer/name-enquiry`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer/name-enquiry`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer/name-enquiry`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer/name-enquiry`
 
             
 
@@ -191,7 +191,7 @@ export class AccountsService {
 
     async fundTransfer(transferData: FundTransferDto, sudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer`
 
             const account = await this.getBySudoId(sudoID)
 
@@ -230,7 +230,7 @@ export class AccountsService {
 
     async getTransferRate(currencyPair: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer/rate/${currencyPair}`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer/rate/${currencyPair}`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/accounts/transfer/rate/${currencyPair}`: `${this.configService.get('SUDO_BASE_URL')}/accounts/transfer/rate/${currencyPair}`
            
 
             const options = {

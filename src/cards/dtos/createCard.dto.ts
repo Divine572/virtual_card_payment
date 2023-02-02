@@ -5,7 +5,6 @@ import { IsEmail, IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-valid
 export enum BrandType {
     MASTERCARD = 'MasterCard',
     VERVE = 'Verve',
-    VISA = 'Visa'
 }
 
 export enum CurrencyPair {
@@ -15,11 +14,6 @@ export enum CurrencyPair {
 
 
 export class CreateCardDto {
-  
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    brand: BrandType
   
     @ApiProperty()
     @IsString()

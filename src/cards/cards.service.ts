@@ -5,7 +5,7 @@ import { Card, CardDocument, CardStatusType } from './card.schema';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { BrandType, CreateCardDto } from './dtos/createCard.dto';
+import { BrandType, CreateCardDto, CurrencyPair } from './dtos/createCard.dto';
 import axios from 'axios';
 
 
@@ -27,6 +27,8 @@ export class CardsService {
         return this.cardModel.find()
     }
 
+
+    
     
 
     async getBySudoId(sudoID: string) {
@@ -40,7 +42,7 @@ export class CardsService {
     }
 
     async create(cardData: CreateCardDto, userSudoID: string) {
-        try {
+        // try {
             const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards`: `${this.configService.get('SUDO_BASE_URL')}/cards`
 
             enum cardType {
@@ -49,9 +51,8 @@ export class CardsService {
 
             const data = {
                 customerId: userSudoID,
-                type: cardType.VIRTUAL,
-                brand: cardData.brand,
                 currency: cardData.currency,
+                type: cardType.VIRTUAL,
                 status: CardStatusType.ACTIVE,
                 spendingControls: {
                     channels: {
@@ -73,7 +74,10 @@ export class CardsService {
             }
 
 
-            if (data.brand === BrandType.VISA) data['expirationDate'] = cardData.expirationDate
+            if (data.currency === CurrencyPair.USA) data["brand"] = BrandType.MASTERCARD
+            else if (data.currency === CurrencyPair.NGA) data["brand"] = BrandType.VERVE
+
+            console.log(data)
 
             const options = {
                 method: 'POST',
@@ -81,9 +85,11 @@ export class CardsService {
                 headers: this.headers,
                 data: data
             }
+
+            console.log(data)
                     
             const response = await axios.request(options);
-            console.log(response.data.message)
+            console.log(response)
             const card = await this.cardModel.create({
                 sudoID: response.data.data?._id,
                 type: response.data.data?.type,
@@ -102,19 +108,19 @@ export class CardsService {
             })
             return card
 
-        } catch (err) {
-            console.log(err.message)
-            throw new HttpException(
-                'Something went wrong while creating a card, Try again!',
-                HttpStatus.INTERNAL_SERVER_ERROR
-            )
-        }
+        // } catch (err) {
+        //     console.log(err)
+        //     throw new HttpException(
+        //         'Something went wrong while creating a card, Try again!',
+        //         HttpStatus.INTERNAL_SERVER_ERROR
+        //     )
+        // }
     }
 
 
     async getCustomerCards(userSudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/customer/${userSudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/customer/${userSudoID}`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/customer/${userSudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/customer/${userSudoID}`
 
            
 
@@ -140,7 +146,7 @@ export class CardsService {
 
     async updateCard(sudoID: string, cardData: UpdateCardDto) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}`
 
             
             const data = {
@@ -181,7 +187,7 @@ export class CardsService {
 
     async generateCardToken(sudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/token`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/token`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/token`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/token`
            
 
             const options = {
@@ -204,7 +210,7 @@ export class CardsService {
 
     async getAllTransactions() {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/transactions`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/transactions`
            
 
             const options = {
@@ -228,7 +234,7 @@ export class CardsService {
 
     async getCardTransactions(sudoID: string) {
         try {
-            const url = this.configService.get('NODE_ENV') == 'deveopment' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/transactions`
+            const url = this.configService.get('NODE_ENV') === 'development' ? `${this.configService.get('SUDO_BASE_TEST_URL')}/cards/${sudoID}/transactions`: `${this.configService.get('SUDO_BASE_URL')}/cards/${sudoID}/transactions`
            
 
             const options = {
