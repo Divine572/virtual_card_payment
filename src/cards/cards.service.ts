@@ -54,30 +54,22 @@ export class CardsService {
                 currency: cardData.currency,
                 type: cardType.VIRTUAL,
                 status: CardStatusType.ACTIVE,
-                spendingControls: {
-                    channels: {
-                        atm: true,
-                        pos: true,
-                        web: true,
-                        mobile: true,
-                    },
-                    spendingLimits: [
-                        {
-                            amount: cardData.spendingLimitAmount,
-                            interval: cardData.spendingLimitInterval
-                        }
-                    ]
-                },
+              
                 sendPINSMS: false,
                 // bankCode: cardData?.bankCode,
                 // accountNumber: cardData.accountNumber
             }
 
 
-            if (data.currency === CurrencyPair.USA) data["brand"] = BrandType.MASTERCARD
-            else if (data.currency === CurrencyPair.NGA) data["brand"] = BrandType.VERVE
+            if (data.currency === CurrencyPair.USD) {
+                data["brand"] = BrandType.MASTERCARD
+                data["issuerCountry"] = "USA"
+            }
+            else if (data.currency === CurrencyPair.NGN) {
+                data["brand"] = BrandType.VERVE
+                data["issuerCountry"] = "NGN"
+            }
 
-            console.log(data)
 
             const options = {
                 method: 'POST',
@@ -89,7 +81,7 @@ export class CardsService {
             console.log(data)
                     
             const response = await axios.request(options);
-            console.log(response)
+            console.log(response.data)
             const card = await this.cardModel.create({
                 sudoID: response.data.data?._id,
                 type: response.data.data?.type,

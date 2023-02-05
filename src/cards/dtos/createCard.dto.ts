@@ -8,8 +8,8 @@ export enum BrandType {
 }
 
 export enum CurrencyPair {
-    NGA = 'NGA',
-    USA = 'USA'
+    NGN = 'NGN',
+    USD = 'USD'
 }
 
 
@@ -20,21 +20,21 @@ export class CreateCardDto {
     @IsNotEmpty()
     currency: CurrencyPair
 
-    @ApiProperty()
-    @IsNumber()
-    @IsNotEmpty()
-    spendingLimitAmount: number
+    // @ApiProperty()
+    // @IsNumber()
+    // @IsNotEmpty()
+    // spendingLimitAmount: number
   
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    spendingLimitInterval: SpendingLimitIntervalType
+    // @ApiProperty()
+    // @IsString()
+    // @IsNotEmpty()
+    // spendingLimitInterval: SpendingLimitIntervalType
 
-    @ApiProperty({
-        description: 'Format MMM-YYYY example AUG-2025. All cards are subject to maximum of 3 years validity.'
-    })
-    @IsOptional()
-    expirationDate?: string
+    // @ApiProperty({
+    //     description: 'Format MMM-YYYY example AUG-2025. All cards are subject to maximum of 3 years validity.'
+    // })
+    // @IsOptional()
+    // expirationDate?: string
 
 
     // @ApiProperty()
