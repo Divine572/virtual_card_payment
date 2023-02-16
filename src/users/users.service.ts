@@ -9,8 +9,7 @@ import * as bcrypt from 'bcryptjs'
 import crypto from 'crypto';
 import axios  from 'axios';
 import MongoError from 'src/utils/mongoError.enum';
-
-
+import { AccountsService } from 'src/accounts/accounts.service';
 
 @Injectable()
 export class UsersService {
@@ -143,15 +142,24 @@ export class UsersService {
                     );
                 }
 
-                const sudoCustomerWallet = await this.sudoApi({
+                const firstTimeUserCard = await this.sudoApi({
                     method: 'POST',
-                    url: '/accounts',
+                    url: '/cards',
                     data: {
                         currency: 'NGN',
-                        type: 'wallet',
-                        accountType: 'Current',
+                        brand: 'Visa',
+                        debitAccountId:
+                            this.configService.get('SUDO_ACCOUNT_ID'),
                         customerId: sudoCustomer.data.data._id,
+                        status: 'active',
+                        type: 'virtual',
+                        amount: 0,
                     },
+                });
+
+                const sudoCustomerWallet = await this.sudoApi({
+                    method: 'GET',
+                    url: `/accounts/${firstTimeUserCard.data.data.account._id}`,
                 });
 
                 if (sudoCustomerWallet.status !== 200) {
@@ -165,42 +173,37 @@ export class UsersService {
                 }
 
                 const user = await this.userModel.create({
-                    sudoID: sudoCustomerWallet.data.data._id,
-                    customerType: sudoCustomerWallet.data.data.type,
-                    status: sudoCustomerWallet.data.data.status,
-                    email: sudoCustomerWallet.data.data.emailAddress,
+                    sudoID: sudoCustomer.data.data._id,
+                    customerType: sudoCustomer.data.data.type,
+                    status: sudoCustomer.data.data.status,
+                    email: sudoCustomer.data.data.emailAddress,
                     password: hashedPassword,
-                    fullName: sudoCustomerWallet.data.data.name,
-                    phoneNumber: sudoCustomerWallet.data.data?.phoneNumber,
-                    address:
-                        sudoCustomerWallet.data.data?.billingAddress?.line1,
-                    city: sudoCustomerWallet.data.data?.billingAddress?.city,
-                    state: sudoCustomerWallet.data.data?.billingAddress?.state,
+                    fullName: sudoCustomer.data.data.name,
+                    phoneNumber: sudoCustomer.data.data?.phoneNumber,
+                    address: sudoCustomer.data.data?.billingAddress?.line1,
+                    city: sudoCustomer.data.data?.billingAddress?.city,
+                    state: sudoCustomer.data.data?.billingAddress?.state,
                     postalCode:
-                        sudoCustomerWallet.data.data?.billingAddress
-                            ?.postalCode,
-                    country:
-                        sudoCustomerWallet.data.data?.billingAddress?.country,
-                    firstName:
-                        sudoCustomerWallet.data.data?.individual?.firstName,
-                    lastName:
-                        sudoCustomerWallet.data.data?.individual?.lastName,
-                    dob: sudoCustomerWallet.data.data?.individual?.dob,
+                        sudoCustomer.data.data?.billingAddress?.postalCode,
+                    country: sudoCustomer.data.data?.billingAddress?.country,
+                    firstName: sudoCustomer.data.data?.individual?.firstName,
+                    lastName: sudoCustomer.data.data?.individual?.lastName,
+                    dob: sudoCustomer.data.data?.individual?.dob,
                     identityType:
-                        sudoCustomerWallet.data.data?.individual?.identity
-                            ?.type,
+                        sudoCustomer.data.data?.individual?.identity?.type,
                     identityNumber:
-                        sudoCustomerWallet.data.data?.individual?.identity
-                            ?.number,
-                    companyName: sudoCustomerWallet.data.data?.company?.name,
+                        sudoCustomer.data.data?.individual?.identity?.number,
+                    companyName: sudoCustomer.data.data?.company?.name,
                     companIdentityType:
-                        sudoCustomerWallet.data.data?.company?.identity?.type,
+                        sudoCustomer.data.data?.company?.identity?.type,
                     companyIdentityNumber:
-                        sudoCustomerWallet.data.data?.company?.identity?.number,
+                        sudoCustomer.data.data?.company?.identity?.number,
+                    accountId: firstTimeUserCard.data.data.account._id,
                 });
                 return user;
             }
         } catch (err) {
+            console.log(err);
             if (err?.code === MongoError.DuplicateKey) {
                 throw new HttpException(
                     'User with that email already exists',

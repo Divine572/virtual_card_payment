@@ -8,77 +8,77 @@ export type UserDocument = User & Document
 
 @Schema({
     toJSON: {
-      getters: true,
-      virtuals: true,
+        getters: true,
+        virtuals: true,
     },
-    timestamps: true
+    timestamps: true,
 })
 export class User {
-
     @Prop({ unique: true })
     email: string;
-  
+
     @Prop()
     password: string;
-   
-  
+
     @Prop()
     fullName: string;
-  
-    @Prop()
-    customerType: CustomerType
-  
-    @Prop()
-    phoneNumber: string
-  
-    @Prop()
-    address: string
-  
-    @Prop()
-    city: string
-  
-    @Prop()
-    state: string
-  
-    @Prop()
-    postalCode: string
-  
-    @Prop()
-    country: string
 
     @Prop()
-    currentHashedRefreshToken?: string
+    customerType: CustomerType;
 
     @Prop()
-    status: string
+    phoneNumber: string;
 
     @Prop()
-    sudoID: string
+    address: string;
 
     @Prop()
-    firstName: string
+    city: string;
 
     @Prop()
-    lastName: string
+    state: string;
 
     @Prop()
-    dob: string
+    postalCode: string;
 
     @Prop()
-    identityType: string
+    country: string;
 
     @Prop()
-    identityNumber: string
+    currentHashedRefreshToken?: string;
 
     @Prop()
-    companyName: string
+    status: string;
 
     @Prop()
-    companIdentityType: string
+    sudoID: string;
 
     @Prop()
-    companyIdentityNumber: string
- 
+    firstName: string;
+
+    @Prop()
+    lastName: string;
+
+    @Prop()
+    dob: string;
+
+    @Prop()
+    identityType: string;
+
+    @Prop()
+    identityNumber: string;
+
+    @Prop()
+    companyName: string;
+
+    @Prop()
+    companIdentityType: string;
+
+    @Prop()
+    companyIdentityNumber: string;
+
+    @Prop()
+    accountId: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User)

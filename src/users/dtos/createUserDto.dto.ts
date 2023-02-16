@@ -92,16 +92,6 @@ export class CreateUserDto {
     dob: string;
 
     @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    identityType: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    identityNumber: string;
-
-    @ApiProperty()
     companyName?: string;
 
     @ApiProperty()

@@ -81,16 +81,6 @@ export class RegisterDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    identityType: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
-    identityNumber: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsNotEmpty()
     bvn: string;
 
     @ApiProperty()
