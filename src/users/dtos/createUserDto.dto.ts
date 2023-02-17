@@ -17,84 +17,86 @@ export enum IdentityType {
 }
 
 export class CreateUserDto {
-  @ApiProperty()
-  @IsEmail()
-  email: string;
+    @ApiProperty()
+    @IsEmail()
+    email: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  password: string;
- 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  fullName: string;
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    password: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  customerType: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    fullName: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  phoneNumber: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    customerType: CustomerType;
 
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    phoneNumber: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  address: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    address: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  city: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    address1: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  state: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    address2: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  postalCode: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    city: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  country: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    state: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  firstName: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    postalCode: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
-  lastName: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    country: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  dob: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    firstName: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  identityType: string
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty()
+    lastName: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  identityNumber: string
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    dob: string;
 
-  @ApiProperty()
-  companyName?: string
+    @ApiProperty()
+    companyName?: string;
 
+    @ApiProperty()
+    @IsString()
+    bvn: string;
 }
 
 
