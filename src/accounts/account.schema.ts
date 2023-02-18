@@ -11,45 +11,47 @@ export type AccountDocument = Account & Document
 
 @Schema({
     toJSON: {
-      getters: true,
-      virtuals: true,
+        getters: true,
+        virtuals: true,
     },
-    timestamps: true
+    timestamps: true,
 })
 export class Account {
-
     @Prop()
-    sudoID: string
+    sudoID: string;
 
     @Prop()
     customerId?: string;
-  
-    @Prop()
-    accountType: AccountType
-  
-    @Prop()
-    type: Type
-  
-    @Prop()
-    currency: CurrencyPair
 
     @Prop()
-    currentBalance: string
+    accountType: AccountType;
 
     @Prop()
-    availableBalance: string
+    type: Type;
 
     @Prop()
-    accountName: string
+    currency: CurrencyPair;
 
     @Prop()
-    creditAccountId: string
+    currentBalance: string;
 
     @Prop()
-    debitAccountId: string
+    availableBalance: string;
 
     @Prop()
-    bankCode: string
+    accountName: string;
+
+    @Prop()
+    creditAccountId: string;
+
+    @Prop()
+    accountNumber: string;
+
+    @Prop()
+    debitAccountId: string;
+
+    @Prop()
+    bankCode: string;
 }
 
 const AccountSchema = SchemaFactory.createForClass(Account)

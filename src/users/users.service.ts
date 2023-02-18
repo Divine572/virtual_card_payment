@@ -10,11 +10,13 @@ import crypto from 'crypto';
 import axios  from 'axios';
 import MongoError from 'src/utils/mongoError.enum';
 import { AccountsService } from 'src/accounts/accounts.service';
+import { Account, AccountDocument } from 'src/accounts/account.schema';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectModel(User.name) private userModel: Model<UserDocument>,
+        @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
         private configService: ConfigService,
     ) {}
 
@@ -132,7 +134,6 @@ export class UsersService {
                 });
 
                 if (sudoCustomer.status !== 201) {
-                    console.log(sudoCustomer);
                     throw new HttpException(
                         {
                             code: 'INTERNAL_SERVER_ERROR',
@@ -141,7 +142,6 @@ export class UsersService {
                         HttpStatus.INTERNAL_SERVER_ERROR,
                     );
                 }
-
                 const firstTimeUserCard = await this.sudoApi({
                     method: 'POST',
                     url: '/cards',
@@ -160,6 +160,19 @@ export class UsersService {
                 const sudoCustomerWallet = await this.sudoApi({
                     method: 'GET',
                     url: `/accounts/${firstTimeUserCard.data.data.account._id}`,
+                });
+
+                const account = await this.accountModel.create({
+                    sudoID: sudoCustomerWallet.data.data?._id,
+                    type: sudoCustomerWallet.data.data?.type,
+                    accountName: sudoCustomerWallet.data.data?.accountName,
+                    accountType: sudoCustomerWallet.data.data?.accountType,
+                    accountNumber: sudoCustomerWallet.data.data?.accountNumber,
+                    currentBalance:
+                        sudoCustomerWallet.data.data?.currentBalance,
+                    availableBalance:
+                        sudoCustomerWallet.data.data?.availableBalance,
+                    bankCode: sudoCustomerWallet.data.data?.bankCode,
                 });
 
                 if (sudoCustomerWallet.status !== 200) {

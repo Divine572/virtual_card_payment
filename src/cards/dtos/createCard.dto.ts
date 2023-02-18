@@ -14,17 +14,20 @@ export enum CurrencyPair {
 
 
 export class CreateCardDto {
-  
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    currency: CurrencyPair
+    currency: CurrencyPair;
+
+    @ApiProperty()
+    @IsNumber()
+    amount: string;
 
     // @ApiProperty()
     // @IsNumber()
     // @IsNotEmpty()
     // spendingLimitAmount: number
-  
+
     // @ApiProperty()
     // @IsString()
     // @IsNotEmpty()
@@ -36,7 +39,6 @@ export class CreateCardDto {
     // @IsOptional()
     // expirationDate?: string
 
-
     // @ApiProperty()
     // @IsString()
     // accountNumber?: string
@@ -44,5 +46,4 @@ export class CreateCardDto {
     // @ApiProperty()
     // @IsString()
     // bankCode: string
-  
 }

@@ -27,7 +27,7 @@ export class CardsController {
     @Post()
     @UseGuards(JwtAuthGuard)
     async createCard(@Body() cardData: CreateCardDto, @Req() request: RequestWithUser) {
-        return this.cardsService.create(cardData, request.user.sudoID)
+        return this.cardsService.create(cardData, request.user);
     }
 
     @Get('/customer/:id') 
