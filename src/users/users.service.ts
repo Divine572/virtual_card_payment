@@ -149,13 +149,25 @@ export class UsersService {
                         currency: 'NGN',
                         brand: 'Visa',
                         debitAccountId:
-                            this.configService.get('SUDO_ACCOUNT_ID'),
+                            this.configService.get('SUDO_USD_ACCOUNT_ID'),
                         customerId: sudoCustomer.data.data._id,
                         status: 'active',
                         type: 'virtual',
                         amount: 0,
                     },
                 });
+
+                if (firstTimeUserCard.status !== 201) {
+                    throw new HttpException(
+                        {
+                            code: 'INTERNAL_SERVER_ERROR',
+                            message: 'Something went wrong',
+                        },
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                    );
+                }
+
+                console.log(firstTimeUserCard)
 
                 const sudoCustomerWallet = await this.sudoApi({
                     method: 'GET',
@@ -224,7 +236,7 @@ export class UsersService {
                 );
             }
 
-            console.log(err, err.response.data, err.response.data);
+            console.log(err);
             throw new HttpException(
                 'Something went wrong while creating an account, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR,

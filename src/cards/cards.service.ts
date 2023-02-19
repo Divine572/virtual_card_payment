@@ -102,7 +102,6 @@ export class CardsService {
             );
         }
 
-        console.log('hi');
         // creation of dollar card
         if (data.currency === 'USD') {
             // Fetch exchange rate
@@ -110,6 +109,8 @@ export class CardsService {
                 method: 'GET',
                 url: `/accounts/transfer/rate/USDNGN`,
             });
+
+            console.log(sudoExchangeRate);
 
             if (sudoExchangeRate.status !== 200)
                 throw new HttpException(
@@ -436,10 +437,13 @@ export class CardsService {
                 headers: this.headers,
             };
 
+
+
             const response = await axios.request(options);
 
             return response.data;
         } catch (err) {
+            console.log(err);
             throw new HttpException(
                 'Something went wrong while sending transactions, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -468,6 +472,7 @@ export class CardsService {
 
             return response.data;
         } catch (err) {
+            console.log(err.response.data.message)
             throw new HttpException(
                 'Something went wrong while sending card transactions, Try again!',
                 HttpStatus.INTERNAL_SERVER_ERROR,
