@@ -11,73 +11,66 @@ import { AuthenticationService } from './authentication.service';
 import { Body, Controller, Post, HttpCode, UseGuards, Req, UseInterceptors, Get, Put, Param } from '@nestjs/common';
 import RegisterDto from './dtos/registerDto.dto';
 import RequestWithUser from './requestWithUser.interface';
-import { ApiBody, ApiCreatedResponse, ApiHeaders, ApiOkResponse } from '@nestjs/swagger';
+import {
+    ApiBody,
+    ApiCreatedResponse,
+    ApiHeaders,
+    ApiOkResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import LoginDto from './dtos/login.dto';
 
 @Controller('authentication')
+@ApiTags('Authentication')
 @UseInterceptors(MongooseClassSerializerInterceptor(User))
 export class AuthenticationController {
-    constructor(private readonly authenticationService: AuthenticationService, 
-        private readonly usersService: UsersService
-        ) {
-
-    }
+    constructor(
+        private readonly authenticationService: AuthenticationService,
+        private readonly usersService: UsersService,
+    ) {}
 
     @ApiCreatedResponse({
         status: 201,
         description: 'A User has been successfully created',
-        type: RegisterDto
+        type: RegisterDto,
     })
     @HttpCode(201)
     @Post('register')
     async register(@Body() user: CreateUserDto) {
-        return this.authenticationService.register(user)
+        return this.authenticationService.register(user);
     }
 
     @ApiOkResponse({
         status: 200,
         description: 'A User has been successfully loggedin',
-        type: LoginDto
+        type: LoginDto,
     })
     @HttpCode(200)
     @UseGuards(LocalAuthenticationGuard)
     @Post('login')
     @ApiBody({ type: LoginDto })
     async login(@Req() request: RequestWithUser) {
-        const {user} = request
-        const userData = user.toObject()
+        const { user } = request;
+        const userData = user.toObject();
         const accessToken = this.authenticationService.getJwtAccessToken(
             user.sudoID,
         );
 
         return {
             ...userData,
-            accessToken
-        }
+            accessToken,
+        };
     }
-   
 
-  
     @ApiOkResponse({
         status: 200,
         description: 'Get currently logged in user',
-        type: User
+        type: User,
     })
     @UseGuards(JwtAuthGuard)
     @Get('me')
     me(@Req() request: RequestWithUser) {
-        const user =  request.user;
-        return user
+        const user = request.user;
+        return user;
     }
-
- 
-
-
-    
-
-    
-
-
-
-
 }
