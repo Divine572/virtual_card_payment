@@ -7,8 +7,11 @@ import  MongooseClassSerializerInterceptor  from 'src/utils/mongooseClassSeriali
 import { Body, Controller, Get, Param, Post, Req, UseGuards, UseInterceptors } from '@nestjs/common';
 import RequestWithUser from 'src/authentication/requestWithUser.interface';
 import { BankNameEnquiryDto } from './dtos/bankNameEnquiry.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('accounts')
+@ApiBearerAuth()
+@ApiTags('Accountc')
 @UseInterceptors(MongooseClassSerializerInterceptor(Account))
 export class AccountsController {
     constructor(private accountsService: AccountsService) {}
